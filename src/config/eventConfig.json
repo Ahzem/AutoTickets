@@ -1,0 +1,20 @@
+{
+  "eventName": "CypherNox 24",
+  "logoPath": "/src/assets/logo.png",
+  "tagline": "A Night with Encrypted Conversation",
+  "description": "Experience an unforgettable evening of connections, surprises, and intrigue as we bring together all batches for the first time.",
+  "date": "December 7, 2024",
+  "time": "5:00 PM onwards",
+  "location": "The Grand Villa",
+  "venue": {
+    "address": "Godagama",
+    "city": "Homagama",
+    "state": "Western Province",
+    "zip": "Not applicable"
+  },
+  "ticketPrice": "Rs. 5500",
+  "earlyBirdPrice": null,
+  "socialLinks": {
+    "facebook": "https://facebook.com/techPhoenix"
+  }
+}

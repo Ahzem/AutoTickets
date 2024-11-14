@@ -1,0 +1,527 @@
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.1);
+  --glass-border: rgba(255, 255, 255, 0.2);
+  --primary: #4e54c8;
+  --secondary: #0307583f;
+  --dark: #0b0c10;
+  --light: rgba(255, 255, 255, 0.8);
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(45deg, #0b0c10, #1f2833, #0b0c10);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  padding: 2rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Animated background elements */
+body::before,
+body::after {
+  content: "";
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: var(--primary);
+  filter: blur(100px);
+  opacity: 0.5;
+  animation: floatingOrbs 20s ease-in-out infinite alternate;
+}
+
+body::before {
+  top: -150px;
+  left: -150px;
+}
+
+body::after {
+  bottom: -150px;
+  right: -150px;
+  background: var(--secondary);
+}
+
+@keyframes gradientBG {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes floatingOrbs {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(100px, 50px);
+  }
+}
+
+.container {
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  padding: 2.5rem;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 800px;
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  transform: translateY(20px);
+  opacity: 1;
+  animation: slideUp 0.5s ease forwards;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 1rem;
+  max-width: 150px;
+}
+
+h1 {
+  color: var(--light);
+  text-align: center;
+  margin-bottom: 1rem;
+  font-size: 2.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+h2 {
+  color: var(--light);
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 1.5rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+label {
+  color: var(--light);
+  font-size: 1rem;
+  margin-bottom: 0.8rem;
+  display: block;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="number"] {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+input::placeholder {
+  padding: 2rem;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+input:focus {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: var(--light);
+  outline: none;
+}
+
+button {
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  color: white;
+  border: none;
+  padding: 1.2rem;
+  border-radius: 12px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: all 0.3s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* styles.css */
+.notification {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 2rem;
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+  color: white;
+  animation: slideIn 0.3s ease;
+  z-index: 1000; /* Ensure it appears in front of other elements */
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  opacity: 0;
+  transform: translate(-50%, 100%);
+}
+
+.notification.show {
+  opacity: 1;
+  transform: translate(-50%, 0);
+}
+
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 1.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 1rem;
+  }
+
+  .container {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  input,
+  button {
+    padding: 0.8rem;
+  }
+}
+
+
+/* styles.css - Add these new styles */
+.event-details {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 15px;
+  padding: 2rem;
+  margin-bottom: 2rem;
+}
+
+.event-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--light);
+}
+
+.info-icon {
+  font-size: 1.5rem;
+  color: var(--primary);
+}
+
+.gradient-flash {
+  position: fixed;
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.flash-1 { background: #4e54c8; animation: flash1 15s infinite; }
+.flash-2 { background: #8f94fb; animation: flash2 20s infinite; }
+.flash-3 { background: #4776e6; animation: flash3 25s infinite; }
+
+@keyframes flash1 {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(100vw, 50vh); }
+}
+
+@keyframes flash2 {
+  0%, 100% { transform: translate(100vw, 0); }
+  50% { transform: translate(0, 50vh); }
+}
+
+@keyframes flash3 {
+  0%, 100% { transform: translate(50vw, 0); }
+  50% { transform: translate(50vw, 100vh); }
+}
+
+/* Add to styles.css */
+.theme-toggle {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+  width: auto;
+  border-radius: 20px;
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.2);
+  transform: translateY(-2px);
+}
+
+/* Custom Select Styles */
+select {
+  width: 100%;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.021);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 1.2em;
+  padding-right: 3rem;
+}
+
+select:focus {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-color: var(--light);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.1);
+}
+
+select option {
+  background-color: #1f2833;
+  color: white;
+  padding: 1rem;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.form-group select:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Optional: Add a floating label effect */
+.form-group label {
+  position: absolute;
+  top: -0.5rem;
+  left: 1rem;
+  background: rgba(31, 40, 51, 0.8);
+  padding: 0 0.5rem;
+  font-size: 0.8rem;
+  transition: all 0.3s ease;
+}
+
+.form-group select:focus + label,
+.form-group select:not(:placeholder-shown) + label {
+  transform: translateY(-1.2rem);
+  font-size: 0.75rem;
+  color: var(--primary);
+}
+
+.form-group select:hover + label {
+  color: var(--primary);
+}
+
+/* Add to styles.css */
+.tagline {
+  color: var(--light);
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 2rem;
+  letter-spacing: 1px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.description {
+  color: var(--light);
+  line-height: 1.6;
+  text-align: center;
+  margin: 1rem 0 2rem;
+  font-size: 1.1rem;
+  position: relative;
+  padding: 1rem 2rem;
+  border-left: 3px solid var(--primary);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 0 10px 10px 0;
+}
+
+.description-icon {
+  color: var(--primary);
+  font-size: 2rem;
+  margin-right: 0.2rem;
+  vertical-align: middle;
+}
+
+.info-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.tagline-icon {
+  color: var(--primary);
+  font-size: 1.3rem;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--light);
+  opacity: 0.7;
+}
+
+input, select {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  color: white;
+  font-size: 1rem;
+}
+
+input:hover select:hover {
+  color: var(--primary);
+}
+
+input:focus, select:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(78, 84, 200, 0.1);
+}
+
+.submit-button {
+  width: 100%;
+  padding: 1rem;
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+/* Add to styles.css */
+.file-upload {
+  position: relative;
+  border: 2px dashed var(--glass-border);
+  border-radius: 12px;
+  padding: 3rem;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.file-upload:hover {
+  border-color: var(--primary);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.file-upload input[type="file"] {
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.file-upload label {
+  background: linear-gradient(45deg, var(--primary), var(--secondary));
+  padding: 0.8rem 1.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.file-upload label:hover {
+  transform: translateY(-2px);
+}
+
+.file-upload .input-icon {
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.file-preview {
+  width: 100%;
+  max-width: 200px;
+  margin-top: 1rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.file-preview img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
