@@ -7,16 +7,18 @@ import MultiStepRegistration from './components/auth/MultiStepRegistration';
 import RegistrationForm from './components/RegistrationForm';
 import Dashboard from './components/Dashboard';
 import ProtectedRoute from './components/ProtectedRoute';
+import SignIn from './components/SignIn';
 
 const App: React.FC = () => {
   return (
-    <ThemeProvider>
-      <AuthProvider>
-        <BrowserRouter>
+    <BrowserRouter>
+      <ThemeProvider>
+        <AuthProvider>
           <Routes>
             {/* Public Routes */}
             <Route path="/" element={<LandingPage />} />
             <Route path="/register" element={<MultiStepRegistration />} />
+            <Route path="/login" element={<SignIn />} />
             
             {/* Protected Routes */}
             <Route element={<ProtectedRoute />}>
@@ -27,9 +29,9 @@ const App: React.FC = () => {
             {/* Fallback Route */}
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </ThemeProvider>
+        </AuthProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 };
 

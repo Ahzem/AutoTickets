@@ -69,9 +69,25 @@ exports.login = async (req, res) => {
       return res.status(400).json({ message: "Invalid password" });
     }
 
-    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
-    res.json({ token, user: { id: user._id, email: user.email } });
+    const token = jwt.sign(
+      { userId: user._id }, 
+      process.env.JWT_SECRET,
+      { expiresIn: '24h' }
+    );
+
+    // Return user data without password
+    const userData = user.toObject();
+    delete userData.password;
+
+    res.json({ 
+      success: true,
+      token,
+      user: userData
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ 
+      success: false, 
+      message: error.message 
+    });
   }
 };
