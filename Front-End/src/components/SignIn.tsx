@@ -71,14 +71,15 @@ const SignIn: React.FC = () => {
   };
 
   return (
-    <div className="container">
+    <div className="">
       <motion.div
         className="signin-container"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
       >
-        <h1>Welcome Back!</h1>
+        <h1>AutoTickets</h1>
+        <h2>Welcome Back!</h2>
         {state?.message && (
           <motion.div
             className="success-message"

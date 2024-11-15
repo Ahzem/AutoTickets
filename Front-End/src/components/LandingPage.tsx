@@ -1,11 +1,13 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useTheme } from '../hooks/useTheme';
 import { FiZap, FiShield, FiHeadphones, FiUsers, FiAward, FiCheckCircle, FiSquare } from 'react-icons/fi';
 import '../css/landing.css';
 import '../index.css';
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
+    const { theme } = useTheme();
 
   const handleRegister = () => {
     navigate('/register');
@@ -16,7 +18,7 @@ const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="">
+    <div className={`landing-layout ${theme}`}>
       {/* Hero Section */}
       <section className="landing-container container hero">
         <div className="hero-content">

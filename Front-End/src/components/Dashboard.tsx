@@ -11,16 +11,21 @@ const Dashboard: React.FC = () => {
   const { theme } = useTheme();
   const navigate = useNavigate();
 
+  const getInitials = (name: string) => {
+    if (!name) return '';
+    const nameParts = name.split(' ');
+    return nameParts.map(part => part.charAt(0)).join('');
+  };
+
   return (
     <div className={`dashboard-layout ${theme}`}>
       {/* Sidebar */}
       <aside className="dashboard-sidebar">
         <div className="user-profile">
           <div className="avatar">
-            {user?.name.split(' ')[0].charAt(0) || ''}
-            {user?.name.split(' ')[1]?.charAt(0) || ''}
+            {user ? getInitials(user.name) : ''}
           </div>
-          <h3>{user?.name}</h3>
+          <h3>{user?.name || 'Guest'}</h3>
           <p>{user?.email || ''}</p>
         </div>
         
@@ -44,7 +49,7 @@ const Dashboard: React.FC = () => {
       {/* Main Content */}
       <main className="dashboard-main">
         <header className="dashboard-header">
-          <h1>Welcome Back, {user?.name.split(' ')[0] || 'Guest'}!</h1>
+          <h1>Welcome Back, {user?.name?.split(' ')[0] || 'Guest'}!</h1>
           <button className="theme-toggle">
             {theme === 'light' ? '🌙' : '☀️'}
           </button>

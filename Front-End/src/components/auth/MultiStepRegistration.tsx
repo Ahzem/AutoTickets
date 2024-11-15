@@ -28,6 +28,7 @@ interface RegistrationData {
 
 const MultiStepRegistration: React.FC = () => {
   const [step, setStep] = useState(1);
+    const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState<RegistrationData>({
     firstName: '',
     lastName: '',
@@ -127,6 +128,7 @@ const MultiStepRegistration: React.FC = () => {
 
 const handleSubmit = async (e: React.FormEvent) => {
   e.preventDefault();
+  setIsLoading(true);
   if (!validateStep()) return;
 
   const formattedData = {
@@ -484,17 +486,27 @@ const handleSubmit = async (e: React.FormEvent) => {
               className='primary-button'
               onClick={nextStep}
               whileTap={{ scale: 0.95 }}
+              
             >
               Next
             </motion.button>
           ) : (
             <motion.button
               type="submit"
-              className='primary-button'
+              className={`primary-button ${isLoading ? 'loading' : ''}`}
               whileTap={{ scale: 0.95 }}
+                disabled={isLoading}
             >
-              Submit
+                {isLoading ? 'Registering...' : 'Register'}
             </motion.button>
+                    //   <motion.button
+                    //   type="submit"
+                    //   className={`primary-button ${isLoading ? 'loading' : ''}`}
+                    //   whileTap={{ scale: 0.95 }}
+                    //   disabled={isLoading}
+                    // >
+                    //   {isLoading ? 'Signing in...' : 'Sign In'}
+                    // </motion.button>
           )}
         </div>
       </form>

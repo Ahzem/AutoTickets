@@ -74,7 +74,7 @@ const RegistrationForm: React.FC = () => {
       </div>
 
       <motion.div 
-        className={`container ${theme}`}
+        className={`registration-container ${theme}`}
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
