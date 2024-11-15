@@ -2,25 +2,41 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 
 const userSchema = new mongoose.Schema({
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
   firstName: { type: String, required: true },
   lastName: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  password: { type: String, required: true },
   contactNumber: { type: String, required: true },
-  type: {
-    type: String,
-    required: true,
-    enum: ["student", "employee", "owner"],
+  type: { type: String, required: true }, 
+  gender: { type: String, required: true },
+  occupation: {
+    type: {
+      student: {
+        university: String,
+        course: String,
+        year: String,
+      },
+      employee: {
+        company: String,
+        position: String,
+        experience: String,
+      },
+      owner: {
+        companyName: String,
+        industry: String,
+        employeeCount: String,
+      },
+    },
+    required: false,
   },
-  // Optional fields
-  gender: String,
   tShirtSize: String,
   mealPreferences: String,
-  address: String,
-  company: String,
-  university: String,
-  studentId: String,
-  employeeId: String,
+  address: {
+    street: String,
+    city: String,
+    state: String,
+    zipCode: String,
+  },
   createdAt: { type: Date, default: Date.now },
 });
 
@@ -30,9 +46,5 @@ userSchema.pre("save", async function (next) {
   }
   next();
 });
-
-userSchema.methods.comparePassword = async function (candidatePassword) {
-  return await bcrypt.compare(candidatePassword, this.password);
-};
 
 module.exports = mongoose.model("User", userSchema);

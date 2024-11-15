@@ -1,15 +1,18 @@
 // src/components/MultiStepRegistration.tsx
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import { FiUser, FiMail, FiPhone, FiBook, FiBriefcase, FiHome } from 'react-icons/fi';
-import '../css/multistep.css';
+import { useNavigate, Link } from 'react-router-dom';
+import { FiUser, FiMail, FiPhone, FiBook, FiBriefcase, FiHome, FiLock, FiCalendar, FiCheckSquare } from 'react-icons/fi';
+import '../../css/multistep.css';
+import '../../index.css';
 
 interface RegistrationData {
   firstName: string;
   lastName: string;
   email: string;
+  dateOfBirth: string;
   password: string;
+  confirmPassword?: string;
   contactNumber: string;
   type: string;
   gender?: string;
@@ -20,6 +23,7 @@ interface RegistrationData {
   university?: string;
   studentId?: string;
   employeeId?: string;
+  terms?: boolean;
 }
 
 const MultiStepRegistration: React.FC = () => {
@@ -28,24 +32,42 @@ const MultiStepRegistration: React.FC = () => {
     firstName: '',
     lastName: '',
     email: '',
+    dateOfBirth: '',
+    address: '',
     password: '',
+    confirmPassword: '',
     contactNumber: '',
-    type: ''
+    type: '',
+    gender: '',
+    tShirtSize: '',
+    mealPreferences: '',
+    company: '',
+    university: '',
+    studentId: '',
+    employeeId: '',
+    terms: false
   });
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    const checked = e.target instanceof HTMLInputElement ? e.target.checked : undefined;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: type === 'checkbox' ? checked : value
     });
+  };
+
+  const validatePassword = (password: string): boolean => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
   };
 
   const validateStep = () => {
     switch (step) {
       case 1:
-        if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+        if (!formData.firstName || !formData.lastName || !formData.email || !formData.dateOfBirth || !formData.contactNumber || !formData.address) {
           setError('Please fill in all required fields');
           return false;
         }
@@ -53,22 +75,40 @@ const MultiStepRegistration: React.FC = () => {
           setError('Please enter a valid email address');
           return false;
         }
-        if (formData.password.length < 6) {
-          setError('Password must be at least 6 characters long');
+        if (!formData.contactNumber.match(/^\d{10}$/)) {
+          setError('Please enter a valid 10-digit phone number');
           return false;
         }
         break;
       case 2:
-        if (!formData.contactNumber || !formData.gender) {
-          setError('Please fill in all required fields');
+        if (!formData.type || !formData.mealPreferences || !formData.tShirtSize) {
+          setError('Please select your type');
           return false;
         }
         break;
       case 3:
-        if (!formData.type) {
-          setError('Please select your type');
+        if (!formData.type || (formData.type === 'student' && (!formData.university || !formData.studentId)) || (formData.type === 'employee' && (!formData.company || !formData.employeeId))) {
+          setError('Please fill in all required fields');
           return false;
         }
+        break;
+      case 4:
+        if (!formData.password || !formData.confirmPassword) {
+            setError('Please fill in all required fields');
+            return false;
+          }
+          if (!validatePassword(formData.password)) {
+            setError('Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number, and one special character');
+            return false;
+          }
+          if (formData.password !== formData.confirmPassword) {
+            setError('Passwords do not match');
+            return false;
+          }
+          if (!formData.terms) {
+            setError('Please agree to the terms and conditions');
+            return false;
+          }
         break;
     }
     setError('');
@@ -85,59 +125,111 @@ const MultiStepRegistration: React.FC = () => {
     setStep(step - 1);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateStep()) return;
+const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  if (!validateStep()) return;
 
-    try {
-      const response = await fetch('http://localhost:3000/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        navigate('/login', { state: { message: 'Registration successful! Please login.' } });
-      } else {
-        setError(data.message || 'Registration failed');
-      }
-    } catch {
-      setError('An error occurred during registration');
+  const formattedData = {
+    firstName: formData.firstName,
+    lastName: formData.lastName,
+    email: formData.email,
+    password: formData.password,
+    contactNumber: formData.contactNumber,
+    type: formData.type,
+    gender: formData.gender || '',
+    occupation: {
+      [formData.type]: formData.type === 'student' 
+        ? {
+            university: formData.university,
+            course: '',
+            year: ''
+          }
+        : {
+            company: formData.company,
+            position: '',
+            experience: ''
+          }
+    },
+    tShirtSize: formData.tShirtSize || '',
+    mealPreferences: formData.mealPreferences || '',
+    address: {
+      street: formData.address || '',
+      city: '',
+      state: '',
+      zipCode: ''
     }
   };
+
+  try {
+    const response = await fetch('http://localhost:3000/api/users/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formattedData),
+      credentials: 'include'
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.message || 'Registration failed');
+    }
+
+    navigate('/login', { 
+      state: { message: 'Registration successful! Please login.' }
+    });
+  } catch (error) {
+    if (error instanceof Error) {
+      setError(error.message);
+    } else {
+      setError('An error occurred during registration');
+    }
+  }
+};
 
   const renderStep = () => {
     switch (step) {
       case 1:
         return (
           <motion.div
+            className="form-section"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
           >
-            <h2>Basic Information</h2>
-            <div className="form-group">
-              <FiUser className="input-icon" />
-              <input
-                type="text"
-                name="firstName"
-                placeholder="First Name"
-                value={formData.firstName}
-                onChange={handleInputChange}
-                required
-              />
+            <h2>Personal Information</h2>
+            <div className="form-row">
+              <div className="form-group">
+                <FiUser className="input-icon" />
+                <input
+                  type="text"
+                  name="firstName"
+                  placeholder="First Name"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
+              <div className="form-group">
+                <FiUser className="input-icon" />
+                <input
+                  type="text"
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={formData.lastName}
+                  onChange={handleInputChange}
+                  required
+                />
+              </div>
             </div>
             <div className="form-group">
-              <FiUser className="input-icon" />
+              <FiCalendar className="input-icon" />
               <input
-                type="text"
-                name="lastName"
-                placeholder="Last Name"
-                value={formData.lastName}
+                type="date"
+                name="dateOfBirth"
+                placeholder="Date of Birth"
+                value={formData.dateOfBirth}
                 onChange={handleInputChange}
                 required
               />
@@ -154,28 +246,6 @@ const MultiStepRegistration: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <FiUser className="input-icon" />
-              <input
-                type="password"
-                name="password"
-                placeholder="Password"
-                value={formData.password}
-                onChange={handleInputChange}
-                required
-              />
-            </div>
-          </motion.div>
-        );
-
-      case 2:
-        return (
-          <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
-          >
-            <h2>Personal Details</h2>
-            <div className="form-group">
               <FiPhone className="input-icon" />
               <input
                 type="tel"
@@ -187,24 +257,74 @@ const MultiStepRegistration: React.FC = () => {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="gender">Gender</label>
+              <FiHome className="input-icon" />
+              <input
+                type="text"
+                name="address"
+                placeholder="Address"
+                value={formData.address}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+          </motion.div>
+        );
+
+      case 2:
+        return (
+          <motion.div
+            className="form-section"
+            initial={{ opacity: 0, x: 100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -100 }}
+          >
+            <h2>Event Preferences</h2>
+            <div className="form-group">
+              <FiCheckSquare className="input-icon" />
               <select
                 id="gender"
                 name="gender"
                 value={formData.gender}
                 onChange={handleInputChange}
-                required
               >
-                <option value="">Select Gender</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
+                <option value="">Select Your Gender</option>
+                <option value="male">Man</option>
+                <option value="female">Woman</option>
                 <option value="other">Other</option>
               </select>
             </div>
             <div className="form-group">
-                <label htmlFor="tShirtSize">T-Shirt Size</label>
+              <FiBriefcase className="input-icon" />
               <select
-              id='tShirtSize'
+                id='type'
+                name="type"
+                value={formData.type}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="">Select Your Role</option>
+                <option value="student">Student</option>
+                <option value="employee">Employee</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <FiCheckSquare className="input-icon" />
+              <select
+                id="mealPreferences"
+                name="mealPreferences"
+                value={formData.mealPreferences}
+                onChange={handleInputChange}
+              >
+                <option value="">Select Meal Preference</option>
+                <option value="vegetarian">Vegetarian</option>
+                <option value="non-vegetarian">Non-Vegetarian</option>
+                <option value="vegan">Vegan</option>
+              </select>
+            </div>
+            <div className="form-group">
+              <FiCheckSquare className="input-icon" />
+              <select
+                id="tShirtSize"
                 name="tShirtSize"
                 value={formData.tShirtSize}
                 onChange={handleInputChange}
@@ -222,31 +342,7 @@ const MultiStepRegistration: React.FC = () => {
       case 3:
         return (
           <motion.div
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
-          >
-            <h2>Role Selection</h2>
-            <div className="form-group">
-                <label htmlFor="type">Type</label>
-              <select
-                id='type'
-                name="type"
-                value={formData.type}
-                onChange={handleInputChange}
-                required
-              >
-                <option value="">Select Type</option>
-                <option value="student">Student</option>
-                <option value="employee">Employee</option>
-              </select>
-            </div>
-          </motion.div>
-        );
-
-      case 4:
-        return (
-          <motion.div
+            className="form-section"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
@@ -300,46 +396,61 @@ const MultiStepRegistration: React.FC = () => {
           </motion.div>
         );
 
-      case 5:
+      case 4:
         return (
           <motion.div
+            className="form-section"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
           >
-            <h2>Additional Preferences</h2>
+            <h2>Create Password</h2>
             <div className="form-group">
-                <label htmlFor="mealPreferences">Meal Preferences</label>
-              <select
-                id='mealPreferences'
-                name="mealPreferences"
-                value={formData.mealPreferences}
+              <FiLock className="input-icon" />
+              <input
+                type="password"
+                name="password"
+                placeholder="Password"
+                value={formData.password}
                 onChange={handleInputChange}
-              >
-                <option value="">Meal Preferences</option>
-                <option value="vegetarian">Vegetarian</option>
-                <option value="non-vegetarian">Non-Vegetarian</option>
-                <option value="vegan">Vegan</option>
-              </select>
+                required
+              />
             </div>
             <div className="form-group">
-              <FiHome className="input-icon" />
-              <textarea
-                name="address"
-                placeholder="Home Address"
-                value={formData.address}
-                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => handleInputChange(e)}
+              <FiLock className="input-icon" />
+              <input
+                type="password"
+                name="confirmPassword"
+                placeholder="Confirm Password"
+                value={formData.confirmPassword}
+                onChange={handleInputChange}
+                required
               />
+            </div>
+            <div className="form-group terms-checkbox">
+              <input
+                type="checkbox"
+                name="terms"
+                id="terms"
+                checked={formData.terms}
+                onChange={handleInputChange}
+                required
+              />
+              <label htmlFor="terms">
+                I agree to the <Link to="/terms">terms and conditions</Link>
+              </label>
             </div>
           </motion.div>
         );
     }
+    setError('');
+    return true;
   };
 
   return (
     <div className="registration-container">
       <div className="steps-indicator">
-        {[1, 2, 3, 4, 5].map((stepNumber) => (
+        {[1, 2, 3, 4].map((stepNumber) => (
           <div
             key={stepNumber}
             className={`step ${step >= stepNumber ? 'active' : ''}`}
@@ -360,15 +471,17 @@ const MultiStepRegistration: React.FC = () => {
           {step > 1 && (
             <motion.button
               type="button"
+              className='secondary-button'
               onClick={prevStep}
               whileTap={{ scale: 0.95 }}
             >
               Previous
             </motion.button>
           )}
-          {step < 5 ? (
+          {step < 4 ? (
             <motion.button
               type="button"
+              className='primary-button'
               onClick={nextStep}
               whileTap={{ scale: 0.95 }}
             >
@@ -377,6 +490,7 @@ const MultiStepRegistration: React.FC = () => {
           ) : (
             <motion.button
               type="submit"
+              className='primary-button'
               whileTap={{ scale: 0.95 }}
             >
               Submit
@@ -384,6 +498,9 @@ const MultiStepRegistration: React.FC = () => {
           )}
         </div>
       </form>
+      <div className="signin-link">
+        Already have an account? <Link to="/login">Sign in</Link>
+      </div>
     </div>
   );
 };

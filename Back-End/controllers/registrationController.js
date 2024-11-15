@@ -1,7 +1,7 @@
-const Registration = require("../models/Registration");
-const { uploadToBlob } = require("../services/blobService");
-const { sendConfirmationEmail } = require("../services/emailService");
-const { generateQRCode } = require("../services/qrCodeService");
+const Registration = require('../models/Registration');
+const { uploadToBlob } = require('../services/blobService');
+const { sendConfirmationEmail } = require('../services/emailService');
+const { generateQRCode } = require('../services/qrCodeService');
 
 const register = async (req, res) => {
   try {
@@ -9,7 +9,7 @@ const register = async (req, res) => {
     const file = req.file;
 
     if (!email || !fullName || !contactNumber || !file) {
-      throw new Error("Missing required fields");
+      throw new Error('Missing required fields');
     }
 
     const fileUrl = await uploadToBlob(file);
@@ -35,13 +35,13 @@ const register = async (req, res) => {
 
     res.json({
       success: true,
-      message: "Registration successful! Please check your email.",
+      message: 'Registration successful! Please check your email.',
     });
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error('Registration error:', error);
     res.status(500).json({
       success: false,
-      message: error.message || "Registration failed. Please try again.",
+      message: error.message || 'Registration failed. Please try again.',
     });
   }
 };

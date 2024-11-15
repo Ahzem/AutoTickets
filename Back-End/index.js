@@ -5,9 +5,20 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const { initializeBlobStorage } = require("./services/blobService");
 const registrationRoutes = require("./routes/registrationRoutes");
+const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+
+const requiredEnvVars = ["MONGODB_URI", "JWT_SECRET", "PORT"];
+const missingEnvVars = requiredEnvVars.filter(
+  (varName) => !process.env[varName]
+);
+
+if (missingEnvVars.length > 0) {
+  console.error("Missing required environment variables:", missingEnvVars);
+  process.exit(1);
+}
 
 // Middleware
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
@@ -15,6 +26,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Routes
+app.use("/api/users", userRoutes);
 app.use("/api", registrationRoutes);
 
 // Error handling middleware
