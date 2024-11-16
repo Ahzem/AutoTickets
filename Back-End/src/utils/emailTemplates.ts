@@ -1,4 +1,10 @@
-const getEmailTemplate = (fullName, email, contactNumber, qrCode) => `
+// src/utils/emailTemplates.ts
+export const getEmailTemplate = (
+  fullName: string,
+  email: string,
+  contactNumber: string,
+  qrCode: string
+): string => `
 <!DOCTYPE html>
 <html>
 <head>
@@ -40,5 +46,3 @@ const getEmailTemplate = (fullName, email, contactNumber, qrCode) => `
 </body>
 </html>
 `;
-
-module.exports = { getEmailTemplate };

@@ -28,7 +28,7 @@ const SignIn: React.FC = () => {
       ...prev,
       [e.target.name]: e.target.value
     }));
-    setError(''); // Clear error when user types
+    setError('');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -54,9 +54,11 @@ const SignIn: React.FC = () => {
 
       if (data.token && data.user) {
         setAuthToken(data.token);
-        login(data.token, data.user);
+        login(data.token, {
+          ...data.user,
+          name: `${data.user.firstName} ${data.user.lastName}`
+        });
         
-        // Navigate to dashboard or previous attempted route
         const intendedPath = location.state?.from?.pathname || '/dashboard';
         navigate(intendedPath, { replace: true });
       } else {

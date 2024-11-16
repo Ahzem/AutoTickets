@@ -451,6 +451,7 @@ const handleSubmit = async (e: React.FormEvent) => {
 
   return (
     <div className="registration-container">
+      <h1>AutoTickets</h1>
       <div className="steps-indicator">
         {[1, 2, 3, 4].map((stepNumber) => (
           <div

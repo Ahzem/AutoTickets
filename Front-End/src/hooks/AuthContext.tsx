@@ -4,7 +4,7 @@ import { setAuthToken, clearAuthToken } from '../services/authService';
 
 interface User {
   id: string;
-  name: string;
+  lastName: string;
   email: string;
 }
 

@@ -1,9 +1,27 @@
-const Registration = require('../models/Registration');
-const { uploadToBlob } = require('../services/blobService');
-const { sendConfirmationEmail } = require('../services/emailService');
-const { generateQRCode } = require('../services/qrCodeService');
+// src/controllers/registrationController.ts
+import { Request, Response } from 'express';
+import Registration from '../models/Registration';
+import { uploadToBlob } from '../services/blobService';
+import { sendConfirmationEmail } from '../services/emailService';
+import { generateQRCode } from '../services/qrCodeService';
 
-const register = async (req, res) => {
+interface RegisterRequestBody {
+  fullName: string;
+  email: string;
+  contactNumber: string;
+}
+
+interface QRCodeData {
+  fullName: string;
+  email: string;
+  contactNumber: string;
+  registrationDate: string;
+}
+
+export const register = async (
+  req: Request<{}, {}, RegisterRequestBody>,
+  res: Response
+): Promise<void> => {
   try {
     const { fullName, email, contactNumber } = req.body;
     const file = req.file;
@@ -14,7 +32,7 @@ const register = async (req, res) => {
 
     const fileUrl = await uploadToBlob(file);
 
-    const qrData = {
+    const qrData: QRCodeData = {
       fullName,
       email,
       contactNumber,
@@ -41,9 +59,7 @@ const register = async (req, res) => {
     console.error('Registration error:', error);
     res.status(500).json({
       success: false,
-      message: error.message || 'Registration failed. Please try again.',
+      message: error instanceof Error ? error.message : 'Registration failed. Please try again.',
     });
   }
 };
-
-module.exports = { register };
