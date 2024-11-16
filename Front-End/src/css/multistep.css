@@ -1,0 +1,339 @@
+.registration-container {
+    width: 100%;
+    max-width: 800px;
+    padding: 2rem;
+  }
+  
+  .registration-container h1 {
+    font-size: 3.5rem;
+    background: linear-gradient(45deg, var(--primary-color), #fff);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    margin-bottom: 3rem;
+  }
+
+.steps-indicator {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding: 0 1rem;
+  }
+
+
+/* Add custom properties for step tracking */
+.registration-container {
+  --step: 1;
+}
+
+.registration-container[data-step="2"] {
+  --step: 2;
+}
+
+.registration-container[data-step="3"] {
+  --step: 3;
+}
+
+.registration-container[data-step="4"] {
+  --step: 4;
+}
+  
+
+  .step {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s ease;
+    background: var(--glass-bg);
+    border: 2px solid var(--glass-border);
+    color: var(--text-color-secondary);
+  }
+
+  .step.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    transform: scale(1.2);
+    box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.2);
+  }
+  
+  .step.completed {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: var(--text-color);
+  }
+
+.step-number {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--background-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.5rem;
+  border: 2px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.step.active .step-number {
+  background: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.step.completed .step-number {
+  background: var(--success-color);
+  color: white;
+  border-color: var(--success-color);
+}
+
+.step-label {
+  font-size: 0.9rem;
+  color: var(--text-color);
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  min-width: 600px;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  position: relative;
+}
+
+.form-row {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  .form-row .form-group {
+    flex: 1;
+  }
+  
+  input,
+  select,
+  textarea {
+      padding: 1rem;
+      padding-left: 2.8rem;
+      transition: border-color 0.3s ease;
+  }
+  
+  select {
+    padding-left: 2.5rem;
+    background-position: right 1rem center;
+}
+
+textarea {
+    padding-top: 1.5rem; /* Extra top padding for textarea */
+}
+
+
+input:focus,
+select:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.input-icon {
+    position: absolute;
+    left: 1rem; /* Consistent left spacing */
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--primary-color);
+    font-size: 1.2rem; /* Consistent icon size */
+}
+
+::placeholder {
+    color: var(--text-color-secondary);
+}
+
+button:hover {
+  background: darken(var(--primary-color), 10%);
+  transform: translateY(-1px);
+}
+
+button:disabled {
+  background: var(--border-color);
+  cursor: not-allowed;
+}
+
+button.secondary {
+  background: var(--secondary-color);
+}
+
+.error-message {
+  color: var(--error-color);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.success-message {
+  color: var(--success-color);
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+/* Animation classes */
+.slide-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.slide-enter-active {
+  opacity: 1;
+  transform: translateX(0%);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.slide-exit {
+  opacity: 1;
+  transform: translateX(0%);
+}
+
+.slide-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  transition: opacity 300ms, transform 300ms;
+}
+
+.button-group {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+  }
+
+  /* Terms and Conditions Checkbox */
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.terms-checkbox input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  cursor: pointer;
+  accent-color: var(--primary-color);
+}
+
+.terms-checkbox label {
+  color: var(--light);
+  font-size: 0.9rem;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.terms-checkbox a {
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.terms-checkbox a:hover {
+  color: var(--primary-color-dark);
+  text-decoration: underline;
+}
+
+/* Sign In Link Section */
+.signin-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--glass-border);
+  color: var(--light);
+  font-size: 0.9rem;
+}
+
+.signin-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.signin-link a:hover {
+  color: var(--primary-color-dark);
+  text-decoration: underline;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .terms-checkbox {
+      margin: 1rem 0;
+    }
+    
+    .terms-checkbox label {
+      font-size: 0.85rem;
+    }
+    
+    .signin-link {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+    }
+    .registration-container {
+    margin: 1rem;
+    padding: 1rem;
+  }
+
+    .form-section {
+        min-width: auto;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-row .form-group {
+        flex: 1;
+    }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+    .button-group button {
+        width: 100%;
+    }
+
+    .steps-indicator {
+        display: none;
+    }
+
+    .step {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+
+    .step-number {
+        width: 30px;
+        height: 30px;
+    }
+
+    .step-label {
+        font-size: 0.8rem;
+    }
+
+    .input-icon {
+        left: 8px;
+    }
+
+}

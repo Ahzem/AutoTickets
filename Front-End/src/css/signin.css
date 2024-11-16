@@ -1,0 +1,96 @@
+/* src/css/signin.css */
+.signin-container {
+    justify-content: center;
+    min-width: 600px;
+}
+
+.signin-container form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.signin-container h1 {
+  font-size: 3.5rem;
+  background: linear-gradient(45deg, var(--primary-color), #fff);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.input-icon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--primary-color);
+  font-size: 1.2rem;
+}
+
+.additional-links {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.additional-links a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.3s ease;
+}
+
+.additional-links a:hover {
+  color: var(--primary-color-dark);
+  text-decoration: underline;
+}
+
+.success-message {
+  background: rgba(39, 174, 96, 0.1);
+  color: #27ae60;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.signup-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--light);
+}
+
+.signup-link a {
+  color: var(--primary-color);
+  text-decoration: none;
+  font-weight: 600;
+  margin-left: 0.5rem;
+  transition: color 0.3s ease;
+}
+
+.signup-link a:hover {
+  color: var(--primary-color-dark);
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .signin-container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+
+  .additional-links {
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+  }
+}
